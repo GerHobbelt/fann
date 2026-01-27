@@ -67,9 +67,22 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
                 along with other more advanced parameters, but it is only recommended to change
    these advanced parameters, for users with insight in how the quickprop training algorithm works.
                 The quickprop training algorithm is described by [Fahlman, 1988].
-        FANN_TRAIN_SARPROP - THE SARPROP ALGORITHM: A SIMULATED ANNEALING ENHANCEMENT TO RESILIENT
-   BACK PROPAGATION
-    http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.47.8197&rep=rep1&type=pdf
+        FANN_TRAIN_SARPROP - A batch training algorithm which extends resilient
+                backpropagation (RPROP) with simulated annealing. SARPROP introduces
+                adaptive weight decay and controlled noise based on the training epoch
+                in order to improve convergence and reduce the risk of getting stuck
+                in local minima. The SARPROP training algorithm is described in
+                "The SARPROP Algorithm: A Simulated Annealing Enhancement to Resilient
+                Back Propagation".
+                http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.47.8197&rep=rep1&type=pdf
+        FANN_TRAIN_ADAM - Adaptive Moment Estimation training algorithm which combines
+                momentum and RMSProp style updates by maintaining exponential moving
+                averages of both the gradients and the squared gradients, with bias
+                correction to compensate for initialization at zero. Adam uses the
+                learning_rate parameter together with additional optimizer parameters
+                (beta1, beta2, epsilon), and generally provides good performance across
+                a wide range of problems with minimal tuning. The Adam training algorithm
+                is described by [Kingma and Ba, 2015].
 
         See also:
                 <fann_set_training_algorithm>, <fann_get_training_algorithm>
