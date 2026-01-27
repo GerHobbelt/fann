@@ -4,8 +4,8 @@ GCC=gcc
 CFLAGS=-I ../src/include
 LDFLAGS=-L ../src/
 
-TARGETS = xor_train xor_test xor_test_fixed simple_train steepness_train simple_test robot mushroom cascade_train scaling_test scaling_train
-DEBUG_TARGETS = xor_train_debug xor_test_debug xor_test_fixed_debug cascade_train_debug
+TARGETS = xor_train xor_test xor_test_fixed simple_train steepness_train simple_test robot mushroom cascade_train scaling_test scaling_train robot_adam
+DEBUG_TARGETS = xor_train_debug xor_test_debug xor_test_fixed_debug cascade_train_debug robot_adam_debug
 
 all: $(TARGETS)
 

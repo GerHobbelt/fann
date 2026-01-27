@@ -79,7 +79,8 @@ enum fann_train_enum {
   FANN_TRAIN_BATCH,
   FANN_TRAIN_RPROP,
   FANN_TRAIN_QUICKPROP,
-  FANN_TRAIN_SARPROP
+  FANN_TRAIN_SARPROP,
+  FANN_TRAIN_ADAM
 };
 
 /* Constant: FANN_TRAIN_NAMES
@@ -95,7 +96,7 @@ enum fann_train_enum {
 */
 static char const *const FANN_TRAIN_NAMES[] = {"FANN_TRAIN_INCREMENTAL", "FANN_TRAIN_BATCH",
                                                "FANN_TRAIN_RPROP", "FANN_TRAIN_QUICKPROP",
-                                               "FANN_TRAIN_SARPROP"};
+                                               "FANN_TRAIN_SARPROP", "FANN_TRAIN_ADAM"};
 
 /* Enums: fann_activationfunc_enum
 
@@ -753,6 +754,25 @@ struct fann {
    * Not allocated if not used.
    */
   fann_type *prev_weights_deltas;
+
+  /* Adam optimizer parameters */
+  /* First moment vector (mean of gradients) for Adam optimizer */
+  fann_type *adam_m;
+  
+  /* Second moment vector (variance of gradients) for Adam optimizer */
+  fann_type *adam_v;
+  
+  /* Exponential decay rate for the first moment estimates (default 0.9) */
+  float adam_beta1;
+  
+  /* Exponential decay rate for the second moment estimates (default 0.999) */
+  float adam_beta2;
+  
+  /* Small constant for numerical stability (default 1e-8) */
+  float adam_epsilon;
+  
+  /* Current timestep for Adam optimizer */
+  unsigned int adam_timestep;
 
 #ifndef FIXEDFANN
   /* Arithmetic mean used to remove steady component in input data.  */

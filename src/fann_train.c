@@ -527,6 +527,34 @@ void fann_clear_train_arrays(struct fann *ann) {
   } else {
     memset(ann->prev_train_slopes, 0, (ann->total_connections_allocated) * sizeof(fann_type));
   }
+
+  /* Allocate and initialize Adam optimizer arrays if using Adam */
+  if (ann->training_algorithm == FANN_TRAIN_ADAM) {
+    /* Allocate first moment vector (m) */
+    if (ann->adam_m == NULL) {
+      ann->adam_m = (fann_type *)calloc(ann->total_connections_allocated, sizeof(fann_type));
+      if (ann->adam_m == NULL) {
+        fann_error((struct fann_error *)ann, FANN_E_CANT_ALLOCATE_MEM);
+        return;
+      }
+    } else {
+      memset(ann->adam_m, 0, (ann->total_connections_allocated) * sizeof(fann_type));
+    }
+
+    /* Allocate second moment vector (v) */
+    if (ann->adam_v == NULL) {
+      ann->adam_v = (fann_type *)calloc(ann->total_connections_allocated, sizeof(fann_type));
+      if (ann->adam_v == NULL) {
+        fann_error((struct fann_error *)ann, FANN_E_CANT_ALLOCATE_MEM);
+        return;
+      }
+    } else {
+      memset(ann->adam_v, 0, (ann->total_connections_allocated) * sizeof(fann_type));
+    }
+
+    /* Reset timestep */
+    ann->adam_timestep = 0;
+  }
 }
 
 /* INTERNAL FUNCTION
@@ -683,8 +711,69 @@ void fann_update_weights_irpropm(struct fann *ann, unsigned int first_weight,
 }
 
 /* INTERNAL FUNCTION
+   The Adam (Adaptive Moment Estimation) algorithm
+   
+   Adam combines ideas from momentum and RMSProp:
+   - Maintains exponential moving averages of gradients (first moment, m)
+   - Maintains exponential moving averages of squared gradients (second moment, v)
+   - Uses bias correction to account for initialization at zero
+   
+   Parameters:
+   - beta1: exponential decay rate for first moment (default 0.9)
+   - beta2: exponential decay rate for second moment (default 0.999)
+   - epsilon: small constant for numerical stability (default 1e-8)
+ */
+void fann_update_weights_adam(struct fann *ann, unsigned int num_data, unsigned int first_weight,
+                              unsigned int past_end) {
+  fann_type *train_slopes = ann->train_slopes;
+  fann_type *weights = ann->weights;
+  fann_type *m = ann->adam_m;
+  fann_type *v = ann->adam_v;
+
+  const float learning_rate = ann->learning_rate;
+  const float beta1 = ann->adam_beta1;
+  const float beta2 = ann->adam_beta2;
+  const float epsilon = ann->adam_epsilon;
+  const float gradient_scale = 1.0f / num_data;
+
+  unsigned int i;
+  float gradient, m_hat, v_hat;
+  float beta1_t, beta2_t;
+
+  /* Increment timestep */
+  ann->adam_timestep++;
+
+  /* Compute bias correction terms: 1 - beta^t */
+  beta1_t = 1.0f - powf(beta1, (float)ann->adam_timestep);
+  beta2_t = 1.0f - powf(beta2, (float)ann->adam_timestep);
+
+  for (i = first_weight; i != past_end; i++) {
+    /* Compute gradient (average over batch) */
+    gradient = train_slopes[i] * gradient_scale;
+
+    /* Update biased first moment estimate: m_t = beta1 * m_{t-1} + (1 - beta1) * g_t */
+    m[i] = beta1 * m[i] + (1.0f - beta1) * gradient;
+
+    /* Update biased second moment estimate: v_t = beta2 * v_{t-1} + (1 - beta2) * g_t^2 */
+    v[i] = beta2 * v[i] + (1.0f - beta2) * gradient * gradient;
+
+    /* Compute bias-corrected first moment: m_hat = m_t / (1 - beta1^t) */
+    m_hat = m[i] / beta1_t;
+
+    /* Compute bias-corrected second moment: v_hat = v_t / (1 - beta2^t) */
+    v_hat = v[i] / beta2_t;
+
+    /* Update weights: w_t = w_{t-1} + learning_rate * m_hat / (sqrt(v_hat) + epsilon) */
+    weights[i] += learning_rate * m_hat / (sqrt(v_hat) + epsilon);
+
+    /* Clear slope for next iteration */
+    train_slopes[i] = 0.0f;
+  }
+}
+
+/* INTERNAL FUNCTION
    The SARprop- algorithm
-*/
+ */
 void fann_update_weights_sarprop(struct fann *ann, unsigned int epoch, unsigned int first_weight,
                                  unsigned int past_end) {
   fann_type *train_slopes = ann->train_slopes;
@@ -919,3 +1008,9 @@ FANN_GET_SET(float, sarprop_temperature)
 FANN_GET_SET(enum fann_stopfunc_enum, train_stop_function)
 FANN_GET_SET(fann_type, bit_fail_limit)
 FANN_GET_SET(float, learning_momentum)
+
+FANN_GET_SET(float, adam_beta1)
+
+FANN_GET_SET(float, adam_beta2)
+
+FANN_GET_SET(float, adam_epsilon)

@@ -175,6 +175,9 @@ int fann_save_internal_fd(struct fann *ann, FILE *conf, const char *configuratio
   fprintf(conf, "rprop_delta_min=%f\n", ann->rprop_delta_min);
   fprintf(conf, "rprop_delta_max=%f\n", ann->rprop_delta_max);
   fprintf(conf, "rprop_delta_zero=%f\n", ann->rprop_delta_zero);
+  fprintf(conf, "adam_beta1=%f\n", ann->adam_beta1);
+  fprintf(conf, "adam_beta2=%f\n", ann->adam_beta2);
+  fprintf(conf, "adam_epsilon=%.8f\n", ann->adam_epsilon);
   fprintf(conf, "cascade_output_stagnation_epochs=%u\n", ann->cascade_output_stagnation_epochs);
   fprintf(conf, "cascade_candidate_change_fraction=%f\n", ann->cascade_candidate_change_fraction);
   fprintf(conf, "cascade_candidate_stagnation_epochs=%u\n",
@@ -322,6 +325,18 @@ struct fann *fann_create_from_fd_1_1(FILE *conf, const char *configuration_file)
     }                                                                      \
   }
 
+/* Optional scanf that sets a default value if the field is not present in the file.
+ * This is used for new parameters to maintain backward compatibility with older saved networks.
+ */
+#define fann_scanf_optional(type, name, val, default_val)                 \
+  {                                                                        \
+    long pos = ftell(conf);                                                \
+    if (fscanf(conf, name "=" type "\n", val) != 1) {                      \
+      fseek(conf, pos, SEEK_SET);                                          \
+      *(val) = (default_val);                                              \
+    }                                                                      \
+  }
+
 #define fann_skip(name)                                                    \
   {                                                                        \
     if (fscanf(conf, name) != 0) {                                         \
@@ -420,6 +435,10 @@ struct fann *fann_create_from_fd(FILE *conf, const char *configuration_file) {
   fann_scanf("%f", "rprop_delta_min", &ann->rprop_delta_min);
   fann_scanf("%f", "rprop_delta_max", &ann->rprop_delta_max);
   fann_scanf("%f", "rprop_delta_zero", &ann->rprop_delta_zero);
+  /* Adam parameters are optional for backward compatibility with older saved networks */
+  fann_scanf_optional("%f", "adam_beta1", &ann->adam_beta1, 0.9f);
+  fann_scanf_optional("%f", "adam_beta2", &ann->adam_beta2, 0.999f);
+  fann_scanf_optional("%f", "adam_epsilon", &ann->adam_epsilon, 1e-8f);
   fann_scanf("%u", "cascade_output_stagnation_epochs", &ann->cascade_output_stagnation_epochs);
   fann_scanf("%f", "cascade_candidate_change_fraction", &ann->cascade_candidate_change_fraction);
   fann_scanf("%u", "cascade_candidate_stagnation_epochs",

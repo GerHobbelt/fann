@@ -748,6 +748,8 @@ FANN_EXTERNAL void FANN_API fann_destroy(struct fann *ann) {
   fann_safe_free(ann->prev_train_slopes);
   fann_safe_free(ann->prev_steps);
   fann_safe_free(ann->prev_weights_deltas);
+  fann_safe_free(ann->adam_m);
+  fann_safe_free(ann->adam_v);
   fann_safe_free(ann->errstr);
   fann_safe_free(ann->cascade_activation_functions);
   fann_safe_free(ann->cascade_activation_steepnesses);
@@ -888,6 +890,14 @@ FANN_EXTERNAL struct fann *FANN_API fann_copy(struct fann *orig) {
   copy->rprop_delta_max = orig->rprop_delta_max;
   copy->rprop_delta_zero = orig->rprop_delta_zero;
 
+  /* Copy Adam optimizer parameters */
+  copy->adam_beta1 = orig->adam_beta1;
+  copy->adam_beta2 = orig->adam_beta2;
+  copy->adam_epsilon = orig->adam_epsilon;
+  copy->adam_timestep = orig->adam_timestep;
+  copy->adam_m = NULL;
+  copy->adam_v = NULL;
+
   /* user_data is not deep copied.  user should use fann_copy_with_user_data() for that */
   copy->user_data = orig->user_data;
 
@@ -1005,6 +1015,29 @@ FANN_EXTERNAL struct fann *FANN_API fann_copy(struct fann *orig) {
       return NULL;
     }
     memcpy(copy->prev_weights_deltas, orig->prev_weights_deltas,
+           copy->total_connections_allocated * sizeof(fann_type));
+  }
+
+  /* Copy Adam optimizer moment vectors if they exist */
+  if (orig->adam_m) {
+    copy->adam_m = (fann_type *)malloc(copy->total_connections_allocated * sizeof(fann_type));
+    if (copy->adam_m == NULL) {
+      fann_error((struct fann_error *)orig, FANN_E_CANT_ALLOCATE_MEM);
+      fann_destroy(copy);
+      return NULL;
+    }
+    memcpy(copy->adam_m, orig->adam_m,
+           copy->total_connections_allocated * sizeof(fann_type));
+  }
+
+  if (orig->adam_v) {
+    copy->adam_v = (fann_type *)malloc(copy->total_connections_allocated * sizeof(fann_type));
+    if (copy->adam_v == NULL) {
+      fann_error((struct fann_error *)orig, FANN_E_CANT_ALLOCATE_MEM);
+      fann_destroy(copy);
+      return NULL;
+    }
+    memcpy(copy->adam_v, orig->adam_v,
            copy->total_connections_allocated * sizeof(fann_type));
   }
 
@@ -1171,6 +1204,9 @@ FANN_EXTERNAL void FANN_API fann_print_parameters(struct fann *ann) {
   printf("RPROP decrease factor                :%8.3f\n", ann->rprop_decrease_factor);
   printf("RPROP delta min                      :%8.3f\n", ann->rprop_delta_min);
   printf("RPROP delta max                      :%8.3f\n", ann->rprop_delta_max);
+  printf("Adam beta1                           :%f\n", ann->adam_beta1);
+  printf("Adam beta2                           :%f\n", ann->adam_beta2);
+  printf("Adam epsilon                         :%.8f\n", ann->adam_epsilon);
   printf("Cascade output change fraction       :%11.6f\n", ann->cascade_output_change_fraction);
   printf("Cascade candidate change fraction    :%11.6f\n", ann->cascade_candidate_change_fraction);
   printf("Cascade output stagnation epochs     :%4d\n", ann->cascade_output_stagnation_epochs);
@@ -1551,6 +1587,14 @@ struct fann *fann_allocate_structure(unsigned int num_layers) {
   ann->sarprop_step_error_shift = 1.385f;
   ann->sarprop_temperature = 0.015f;
   ann->sarprop_epoch = 0;
+
+  /* Variables for use with Adam training (reasonable defaults) */
+  ann->adam_m = NULL;
+  ann->adam_v = NULL;
+  ann->adam_beta1 = 0.9f;
+  ann->adam_beta2 = 0.999f;
+  ann->adam_epsilon = 1e-8f;
+  ann->adam_timestep = 0;
 
   fann_init_error_data((struct fann_error *)ann);
 

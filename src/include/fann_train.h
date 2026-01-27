@@ -817,6 +817,75 @@ FANN_EXTERNAL float FANN_API fann_get_learning_momentum(struct fann *ann);
  */
 FANN_EXTERNAL void FANN_API fann_set_learning_momentum(struct fann *ann, float learning_momentum);
 
+/* Function: fann_get_adam_beta1
+
+   Get the Adam optimizer beta1 parameter (exponential decay rate for first moment estimates).
+
+   The default beta1 is 0.9.
+
+   See also:
+   <fann_set_adam_beta1>, <fann_set_training_algorithm>
+
+   This function appears in FANN >= 2.3.0.
+ */
+FANN_EXTERNAL float FANN_API fann_get_adam_beta1(struct fann *ann);
+
+/* Function: fann_set_adam_beta1
+
+   Set the Adam optimizer beta1 parameter (exponential decay rate for first moment estimates).
+
+   Typical values are close to 1.0, with the default being 0.9.
+
+   This function appears in FANN >= 2.3.0.
+ */
+FANN_EXTERNAL void FANN_API fann_set_adam_beta1(struct fann *ann, float adam_beta1);
+
+/* Function: fann_get_adam_beta2
+
+   Get the Adam optimizer beta2 parameter (exponential decay rate for second moment estimates).
+
+   The default beta2 is 0.999.
+
+   See also:
+   <fann_set_adam_beta2>, <fann_set_training_algorithm>
+
+   This function appears in FANN >= 2.3.0.
+ */
+FANN_EXTERNAL float FANN_API fann_get_adam_beta2(struct fann *ann);
+
+/* Function: fann_set_adam_beta2
+
+   Set the Adam optimizer beta2 parameter (exponential decay rate for second moment estimates).
+
+   Typical values are close to 1.0, with the default being 0.999.
+
+   This function appears in FANN >= 2.3.0.
+ */
+FANN_EXTERNAL void FANN_API fann_set_adam_beta2(struct fann *ann, float adam_beta2);
+
+/* Function: fann_get_adam_epsilon
+
+   Get the Adam optimizer epsilon parameter (small constant for numerical stability).
+
+   The default epsilon is 1e-8.
+
+   See also:
+   <fann_set_adam_epsilon>, <fann_set_training_algorithm>
+
+   This function appears in FANN >= 2.3.0.
+ */
+FANN_EXTERNAL float FANN_API fann_get_adam_epsilon(struct fann *ann);
+
+/* Function: fann_set_adam_epsilon
+
+   Set the Adam optimizer epsilon parameter (small constant for numerical stability).
+
+   This is used to prevent division by zero. Typical values are very small, with the default being 1e-8.
+
+   This function appears in FANN >= 2.3.0.
+ */
+FANN_EXTERNAL void FANN_API fann_set_adam_epsilon(struct fann *ann, float adam_epsilon);
+
 /* Function: fann_get_activation_function
 
    Get the activation function for neuron number *neuron* in layer number *layer*,
