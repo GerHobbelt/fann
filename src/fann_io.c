@@ -328,13 +328,13 @@ struct fann *fann_create_from_fd_1_1(FILE *conf, const char *configuration_file)
 /* Optional scanf that sets a default value if the field is not present in the file.
  * This is used for new parameters to maintain backward compatibility with older saved networks.
  */
-#define fann_scanf_optional(type, name, val, default_val)                 \
-  {                                                                        \
-    long pos = ftell(conf);                                                \
-    if (fscanf(conf, name "=" type "\n", val) != 1) {                      \
-      fseek(conf, pos, SEEK_SET);                                          \
-      *(val) = (default_val);                                              \
-    }                                                                      \
+#define fann_scanf_optional(type, name, val, default_val) \
+  {                                                       \
+    long pos = ftell(conf);                               \
+    if (fscanf(conf, name "=" type "\n", val) != 1) {     \
+      fseek(conf, pos, SEEK_SET);                         \
+      *(val) = (default_val);                             \
+    }                                                     \
   }
 
 #define fann_skip(name)                                                    \

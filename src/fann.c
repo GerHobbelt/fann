@@ -1026,8 +1026,7 @@ FANN_EXTERNAL struct fann *FANN_API fann_copy(struct fann *orig) {
       fann_destroy(copy);
       return NULL;
     }
-    memcpy(copy->adam_m, orig->adam_m,
-           copy->total_connections_allocated * sizeof(fann_type));
+    memcpy(copy->adam_m, orig->adam_m, copy->total_connections_allocated * sizeof(fann_type));
   }
 
   if (orig->adam_v) {
@@ -1037,8 +1036,7 @@ FANN_EXTERNAL struct fann *FANN_API fann_copy(struct fann *orig) {
       fann_destroy(copy);
       return NULL;
     }
-    memcpy(copy->adam_v, orig->adam_v,
-           copy->total_connections_allocated * sizeof(fann_type));
+    memcpy(copy->adam_v, orig->adam_v, copy->total_connections_allocated * sizeof(fann_type));
   }
 
   return copy;

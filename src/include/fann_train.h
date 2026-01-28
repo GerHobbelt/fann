@@ -880,7 +880,8 @@ FANN_EXTERNAL float FANN_API fann_get_adam_epsilon(struct fann *ann);
 
    Set the Adam optimizer epsilon parameter (small constant for numerical stability).
 
-   This is used to prevent division by zero. Typical values are very small, with the default being 1e-8.
+   This is used to prevent division by zero. Typical values are very small, with the default being
+   1e-8.
 
    This function appears in FANN >= 2.3.0.
  */

@@ -43,46 +43,46 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
         The Training algorithms used when training on <struct fann_train_data> with functions like
         <fann_train_on_data> or <fann_train_on_file>. The incremental training alters the weights
         after each time it is presented an input pattern, while batch only alters the weights once
-   after it has been presented to all the patterns.
+        after it has been presented to all the patterns.
 
         FANN_TRAIN_INCREMENTAL -  Standard backpropagation algorithm, where the weights are
                 updated after each training pattern. This means that the weights are updated many
-                times during a single epoch. For this reason some problems will train very fast with
-                this algorithm, while other more advanced problems will not train very well.
+                times during a single epoch. For this reason some problems will train very fast
+                with this algorithm, while other more advanced problems will not train very well.
         FANN_TRAIN_BATCH -  Standard backpropagation algorithm, where the weights are updated after
                 calculating the mean square error for the whole training set. This means that the
-   weights are only updated once during an epoch. For this reason some problems will train slower
-   with this algorithm. But since the mean square error is calculated more correctly than in
-                incremental training, some problems will reach better solutions with this algorithm.
-        FANN_TRAIN_RPROP - A more advanced batch training algorithm which achieves good results
-                for many problems. The RPROP training algorithm is adaptive, and does therefore not
-                use the learning_rate. Some other parameters can however be set to change the way
-   the RPROP algorithm works, but it is only recommended for users with insight in how the RPROP
-                training algorithm works. The RPROP training algorithm is described by
-                [Riedmiller and Braun, 1993], but the actual learning algorithm used here is the
-                iRPROP- training algorithm which is described by [Igel and Husken, 2000] which
-                is a variant of the standard RPROP training algorithm.
+                weights are only updated once during an epoch. For this reason some problems will
+                train slower with this algorithm. But since the mean square error is calculated
+                more correctly than in incremental training, some problems will reach better
+                solutions with this algorithm.
+        FANN_TRAIN_RPROP - A more advanced batch training algorithm which achieves good
+                results for many problems. The RPROP training algorithm is adaptive, and does
+                therefore not use the learning_rate. Some other parameters can however be set to
+                change the way the RPROP algorithm works, but it is only recommended for users with
+                insight in how the RPROP training algorithm works. The RPROP training algorithm is
+                described by [Riedmiller and Braun, 1993], but the actual Learning algorithm used
+                here is the iRPROP- training algorithm which is described by [Igel and Husken,
+                2000] which is a variant of the standard RPROP training algorithm.
         FANN_TRAIN_QUICKPROP - A more advanced batch training algorithm which achieves good results
-                for many problems. The quickprop training algorithm uses the learning_rate parameter
-                along with other more advanced parameters, but it is only recommended to change
-   these advanced parameters, for users with insight in how the quickprop training algorithm works.
-                The quickprop training algorithm is described by [Fahlman, 1988].
-        FANN_TRAIN_SARPROP - A batch training algorithm which extends resilient
-                backpropagation (RPROP) with simulated annealing. SARPROP introduces
-                adaptive weight decay and controlled noise based on the training epoch
-                in order to improve convergence and reduce the risk of getting stuck
-                in local minima. The SARPROP training algorithm is described in
-                "The SARPROP Algorithm: A Simulated Annealing Enhancement to Resilient
+                for many problems. The quickprop training algorithm uses the learning_rate
+                parameter along with other more advanced parameters, but it is only recommended to
+                change these advanced parameters, for users with insight in how the quickprop
+                training algorithm works. The quickprop training algorithm is described by
+                [Fahlman, 1988].
+        FANN_TRAIN_SARPROP - A batch training algorithm which extends resilient backpropagation
+                (RPROP) with simulated annealing. SARPROP introduces adaptive weight decay and
+                controlled noise based on the training epoch in order to improve convergence and
+                reduce the risk of getting stuck in local minima. The SARPROP training algorithm is
+                described in "The SARPROP Algorithm: A Simulated Annealing Enhancement to Resilient
                 Back Propagation".
                 http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.47.8197&rep=rep1&type=pdf
-        FANN_TRAIN_ADAM - Adaptive Moment Estimation training algorithm which combines
-                momentum and RMSProp style updates by maintaining exponential moving
-                averages of both the gradients and the squared gradients, with bias
-                correction to compensate for initialization at zero. Adam uses the
-                learning_rate parameter together with additional optimizer parameters
-                (beta1, beta2, epsilon), and generally provides good performance across
-                a wide range of problems with minimal tuning. The Adam training algorithm
-                is described by [Kingma and Ba, 2015].
+        FANN_TRAIN_ADAM - Adaptive Moment Estimation training algorithm which combines momentum and
+                RMSProp style updates by maintaining exponential moving averages of both the
+                gradients and the squared gradients, with bias correction to compensate for
+                initialization at zero. Adam uses the learning_rate parameter together with
+                additional optimizer parameters (beta1, beta2, epsilon), and generally provides
+                good performance across a wide range of problems with minimal tuning. The Adam
+                training algorithm is described by [Kingma and Ba, 2015].
 
         See also:
                 <fann_set_training_algorithm>, <fann_get_training_algorithm>
@@ -108,8 +108,8 @@ enum fann_train_enum {
       <fann_train_enum>
 */
 static char const *const FANN_TRAIN_NAMES[] = {"FANN_TRAIN_INCREMENTAL", "FANN_TRAIN_BATCH",
-                                               "FANN_TRAIN_RPROP", "FANN_TRAIN_QUICKPROP",
-                                               "FANN_TRAIN_SARPROP", "FANN_TRAIN_ADAM"};
+                                               "FANN_TRAIN_RPROP",       "FANN_TRAIN_QUICKPROP",
+                                               "FANN_TRAIN_SARPROP",     "FANN_TRAIN_ADAM"};
 
 /* Enums: fann_activationfunc_enum
 
@@ -771,19 +771,19 @@ struct fann {
   /* Adam optimizer parameters */
   /* First moment vector (mean of gradients) for Adam optimizer */
   fann_type *adam_m;
-  
+
   /* Second moment vector (variance of gradients) for Adam optimizer */
   fann_type *adam_v;
-  
+
   /* Exponential decay rate for the first moment estimates (default 0.9) */
   float adam_beta1;
-  
+
   /* Exponential decay rate for the second moment estimates (default 0.999) */
   float adam_beta2;
-  
+
   /* Small constant for numerical stability (default 1e-8) */
   float adam_epsilon;
-  
+
   /* Current timestep for Adam optimizer */
   unsigned int adam_timestep;
 

@@ -712,12 +712,12 @@ void fann_update_weights_irpropm(struct fann *ann, unsigned int first_weight,
 
 /* INTERNAL FUNCTION
    The Adam (Adaptive Moment Estimation) algorithm
-   
+
    Adam combines ideas from momentum and RMSProp:
    - Maintains exponential moving averages of gradients (first moment, m)
    - Maintains exponential moving averages of squared gradients (second moment, v)
    - Uses bias correction to account for initialization at zero
-   
+
    Parameters:
    - beta1: exponential decay rate for first moment (default 0.9)
    - beta2: exponential decay rate for second moment (default 0.999)
