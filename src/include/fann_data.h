@@ -24,68 +24,67 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* Section: FANN Datatypes
 
-   The two main datatypes used in the fann library are <struct fann>,
-   which represents an artificial neural network, and <struct fann_train_data>,
-   which represents training data.
- */
+    The two main datatypes used in the fann library are <struct fann>,
+    which represents an artificial neural network, and <struct fann_train_data>,
+    which represents training data.
+*/
 
 /* Type: fann_type
-   fann_type is the type used for the weights, inputs and outputs of the neural network.
 
-        fann_type is defined as a:
-        float - if you include fann.h or floatfann.h
-        double - if you include doublefann.h
-        int - if you include fixedfann.h (please be aware that fixed point usage is
-                        only to be used during execution, and not during training).
+    fann_type is the type used for the weights, inputs and outputs of the neural network.
+
+    fann_type is defined as a:
+      float - if you include fann.h or floatfann.h
+      double - if you include doublefann.h
+      int - if you include fixedfann.h (please be aware that fixed point usage is only to be used
+        during execution, and not during training).
 */
 
 /* Enum: fann_train_enum
-        The Training algorithms used when training on <struct fann_train_data> with functions like
-        <fann_train_on_data> or <fann_train_on_file>. The incremental training alters the weights
-        after each time it is presented an input pattern, while batch only alters the weights once
-        after it has been presented to all the patterns.
 
-        FANN_TRAIN_INCREMENTAL -  Standard backpropagation algorithm, where the weights are
-                updated after each training pattern. This means that the weights are updated many
-                times during a single epoch. For this reason some problems will train very fast
-                with this algorithm, while other more advanced problems will not train very well.
-        FANN_TRAIN_BATCH -  Standard backpropagation algorithm, where the weights are updated after
-                calculating the mean square error for the whole training set. This means that the
-                weights are only updated once during an epoch. For this reason some problems will
-                train slower with this algorithm. But since the mean square error is calculated
-                more correctly than in incremental training, some problems will reach better
-                solutions with this algorithm.
-        FANN_TRAIN_RPROP - A more advanced batch training algorithm which achieves good
-                results for many problems. The RPROP training algorithm is adaptive, and does
-                therefore not use the learning_rate. Some other parameters can however be set to
-                change the way the RPROP algorithm works, but it is only recommended for users with
-                insight in how the RPROP training algorithm works. The RPROP training algorithm is
-                described by [Riedmiller and Braun, 1993], but the actual Learning algorithm used
-                here is the iRPROP- training algorithm which is described by [Igel and Husken,
-                2000] which is a variant of the standard RPROP training algorithm.
-        FANN_TRAIN_QUICKPROP - A more advanced batch training algorithm which achieves good results
-                for many problems. The quickprop training algorithm uses the learning_rate
-                parameter along with other more advanced parameters, but it is only recommended to
-                change these advanced parameters, for users with insight in how the quickprop
-                training algorithm works. The quickprop training algorithm is described by
-                [Fahlman, 1988].
-        FANN_TRAIN_SARPROP - A batch training algorithm which extends resilient backpropagation
-                (RPROP) with simulated annealing. SARPROP introduces adaptive weight decay and
-                controlled noise based on the training epoch in order to improve convergence and
-                reduce the risk of getting stuck in local minima. The SARPROP training algorithm is
-                described in "The SARPROP Algorithm: A Simulated Annealing Enhancement to Resilient
-                Back Propagation".
-                http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.47.8197&rep=rep1&type=pdf
-        FANN_TRAIN_ADAM - Adaptive Moment Estimation training algorithm which combines momentum and
-                RMSProp style updates by maintaining exponential moving averages of both the
-                gradients and the squared gradients, with bias correction to compensate for
-                initialization at zero. Adam uses the learning_rate parameter together with
-                additional optimizer parameters (beta1, beta2, epsilon), and generally provides
-                good performance across a wide range of problems with minimal tuning. The Adam
-                training algorithm is described by [Kingma and Ba, 2015].
+    The Training algorithms used when training on <struct fann_train_data> with functions like
+    <fann_train_on_data> or <fann_train_on_file>. The incremental training alters the weights after
+    each time it is presented an input pattern, while batch only alters the weights once after it
+    has been presented to all the patterns.
 
-        See also:
-                <fann_set_training_algorithm>, <fann_get_training_algorithm>
+      FANN_TRAIN_INCREMENTAL -  Standard backpropagation algorithm, where the weights are updated
+        after each training pattern. This means that the weights are updated many times during
+        a single epoch. For this reason some problems will train very fast with this algorithm,
+        while other more advanced problems will not train very well.
+      FANN_TRAIN_BATCH -  Standard backpropagation algorithm, where the weights are updated after
+        calculating the mean square error for the whole training set. This means that the weights
+        are only updated once during an epoch. For this reason some problems will train slower
+        with this algorithm. But since the mean square error is calculated more correctly than
+        in incremental training, some problems will reach better solutions with this algorithm.
+      FANN_TRAIN_RPROP - A more advanced batch training algorithm which achieves good results for
+        many problems. The RPROP training algorithm is adaptive, and does therefore not use the
+        learning_rate. Some other parameters can however be set to change the way the RPROP
+        algorithm works, but it is only recommended for users with insight in how the RPROP
+        training algorithm works. The RPROP training algorithm is described by
+        [Riedmiller and Braun, 1993], but the actual Learning algorithm used here is the iRPROP
+        training algorithm which is described by [Igel and Husken, 2000] which is a variant of
+        the standard RPROP training algorithm. FANN_TRAIN_QUICKPROP - A more advanced batch
+        training algorithm which achieves good results for many problems. The quickprop training
+        algorithm uses the learning_rate parameter along with other more advanced parameters, but
+        it is only recommended to change these advanced parameters, for users with insight in how
+        the quickprop training algorithm works. The quickprop training algorithm is described by
+        [Fahlman, 1988].
+      FANN_TRAIN_SARPROP - A batch training algorithm which extends resilient backpropagation
+        (RPROP) with simulated annealing. SARPROP introduces adaptive weight decay and controlled
+        noise based on the training epoch in order to improve convergence and reduce the risk of
+        getting stuck in local minima. The SARPROP training algorithm is described in
+        "The SARPROP Algorithm: A Simulated Annealing Enhancement to Resilient Back Propagation".
+        http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.47.8197&rep=rep1&type=pdf
+      FANN_TRAIN_ADAM - Adaptive Moment Estimation training algorithm which combines momentum and
+        RMSProp style updates by maintaining exponential moving averages of both the gradients
+        and the squared gradients, with bias correction to compensate for initialization at zero.
+        Adam uses the learning_rate parameter together with additional optimizer parameters
+        (beta1, beta2, epsilon), and generally provides good performance across a wide range of
+        problems with minimal tuning. The Adam training algorithm is described by
+        [Kingma and Ba, 2015].
+
+    See also:
+      <fann_set_training_algorithm>, <fann_get_training_algorithm>
 */
 enum fann_train_enum {
   FANN_TRAIN_INCREMENTAL = 0,
@@ -98,13 +97,13 @@ enum fann_train_enum {
 
 /* Constant: FANN_TRAIN_NAMES
 
-   Constant array consisting of the names for the training algorithms, so that the name of an
-   training function can be received by:
-   (code)
-   char *name = FANN_TRAIN_NAMES[train_function];
-   (end)
+    Constant array consisting of the names for the training algorithms, so that the name of an
+    training function can be received by:
+    (code)
+    char *name = FANN_TRAIN_NAMES[train_function];
+    (end)
 
-   See Also:
+    See Also:
       <fann_train_enum>
 */
 static char const *const FANN_TRAIN_NAMES[] = {"FANN_TRAIN_INCREMENTAL", "FANN_TRAIN_BATCH",
@@ -113,117 +112,116 @@ static char const *const FANN_TRAIN_NAMES[] = {"FANN_TRAIN_INCREMENTAL", "FANN_T
 
 /* Enums: fann_activationfunc_enum
 
-        The activation functions used for the neurons during training. The activation functions
-        can either be defined for a group of neurons by <fann_set_activation_function_hidden> and
-        <fann_set_activation_function_output> or it can be defined for a single neuron by
-   <fann_set_activation_function>.
+    The activation functions used for the neurons during training. The activation functions
+    can either be defined for a group of neurons by <fann_set_activation_function_hidden> and
+    <fann_set_activation_function_output> or it can be defined for a single neuron by
+    <fann_set_activation_function>.
 
-        The steepness of an activation function is defined in the same way by
-        <fann_set_activation_steepness_hidden>, <fann_set_activation_steepness_output> and
-   <fann_set_activation_steepness>.
+    The steepness of an activation function is defined in the same way by
+    <fann_set_activation_steepness_hidden>, <fann_set_activation_steepness_output> and
+    <fann_set_activation_steepness>.
 
-   The functions are described with functions where:
-   * x is the input to the activation function,
-   * y is the output,
-   * s is the steepness and
-   * d is the derivation.
+    The functions are described with functions where:
+      * x is the input to the activation function,
+      * y is the output,
+      * s is the steepness and
+      * d is the derivation.
 
-   FANN_LINEAR - Linear activation function.
-     * span: -inf < y < inf
-         * y = x*s, d = 1*s
-         * Can NOT be used in fixed point.
+    FANN_LINEAR - Linear activation function.
+      * span: -inf < y < inf
+      * y = x*s, d = 1*s
+      * Can NOT be used in fixed point.
 
-   FANN_THRESHOLD - Threshold activation function.
-         * x < 0 -> y = 0, x >= 0 -> y = 1
-         * Can NOT be used during training.
+    FANN_THRESHOLD - Threshold activation function.
+      * x < 0 -> y = 0, x >= 0 -> y = 1
+      * Can NOT be used during training.
 
-   FANN_THRESHOLD_SYMMETRIC - Threshold activation function.
-         * x < 0 -> y = -1, x >= 0 -> y = 1
-         * Can NOT be used during training.
+    FANN_THRESHOLD_SYMMETRIC - Threshold activation function.
+      * x < 0 -> y = -1, x >= 0 -> y = 1
+      * Can NOT be used during training.
 
-   FANN_SIGMOID - Sigmoid activation function.
-         * One of the most used activation functions.
-         * span: 0 < y < 1
-         * y = 1/(1 + exp(-2*s*x))
-         * d = 2*s*y*(1 - y)
+    FANN_SIGMOID - Sigmoid activation function.
+      * One of the most used activation functions.
+      * span: 0 < y < 1
+      * y = 1/(1 + exp(-2*s*x))
+      * d = 2*s*y*(1 - y)
 
-   FANN_SIGMOID_STEPWISE - Stepwise linear approximation to sigmoid.
-         * Faster than sigmoid but a bit less precise.
+    FANN_SIGMOID_STEPWISE - Stepwise linear approximation to sigmoid.
+      * Faster than sigmoid but a bit less precise.
 
-   FANN_SIGMOID_SYMMETRIC - Symmetric sigmoid activation function, aka. tanh.
-         * One of the most used activation functions.
-         * span: -1 < y < 1
-         * y = tanh(s*x) = 2/(1 + exp(-2*s*x)) - 1
-         * d = s*(1-(y*y))
+    FANN_SIGMOID_SYMMETRIC - Symmetric sigmoid activation function, aka. tanh.
+      * One of the most used activation functions.
+      * span: -1 < y < 1
+      * y = tanh(s*x) = 2/(1 + exp(-2*s*x)) - 1
+      * d = s*(1-(y*y))
 
-   FANN_SIGMOID_SYMMETRIC_STEPWISE - Stepwise linear approximation to symmetric sigmoid.
-         * Faster than symmetric sigmoid but a bit less precise.
+    FANN_SIGMOID_SYMMETRIC_STEPWISE - Stepwise linear approximation to symmetric sigmoid.
+      * Faster than symmetric sigmoid but a bit less precise.
 
-   FANN_GAUSSIAN - Gaussian activation function.
-         * 0 when x = -inf, 1 when x = 0 and 0 when x = inf
-         * span: 0 < y < 1
-         * y = exp(-x*s*x*s)
-         * d = -2*x*s*y*s
+    FANN_GAUSSIAN - Gaussian activation function.
+      * 0 when x = -inf, 1 when x = 0 and 0 when x = inf
+      * span: 0 < y < 1
+      * y = exp(-x*s*x*s)
+      * d = -2*x*s*y*s
 
-   FANN_GAUSSIAN_SYMMETRIC - Symmetric gaussian activation function.
-         * -1 when x = -inf, 1 when x = 0 and 0 when x = inf
-         * span: -1 < y < 1
-         * y = exp(-x*s*x*s)*2-1
-         * d = -2*x*s*(y+1)*s
+    FANN_GAUSSIAN_SYMMETRIC - Symmetric gaussian activation function.
+      * -1 when x = -inf, 1 when x = 0 and 0 when x = inf
+      * span: -1 < y < 1
+      * y = exp(-x*s*x*s)*2-1
+      * d = -2*x*s*(y+1)*s
 
-   FANN_ELLIOT - Fast (sigmoid like) activation function defined by David Elliott
-         * span: 0 < y < 1
-         * y = ((x*s) / 2) / (1 + |x*s|) + 0.5
-         * d = s*1/(2*(1+|x*s|)*(1+|x*s|))
+    FANN_ELLIOT - Fast sigmoid like activation function defined by David Elliott
+      * span: 0 < y < 1
+      * y = ((x*s) / 2) / (1 + |x*s|) + 0.5
+      * d = s*1/(2*(1+|x*s|)*(1+|x*s|))
 
-   FANN_ELLIOT_SYMMETRIC - Fast (symmetric sigmoid like) activation function defined by David
-   Elliott
-         * span: -1 < y < 1
-         * y = (x*s) / (1 + |x*s|)
-         * d = s*1/((1+|x*s|)*(1+|x*s|))
+    FANN_ELLIOT_SYMMETRIC - Fast symmetric sigmoid like action function defined by David Elliott
+      * span: -1 < y < 1
+      * y = (x*s) / (1 + |x*s|)
+      * d = s*1/((1+|x*s|)*(1+|x*s|))
 
-        FANN_LINEAR_PIECE - Bounded linear activation function.
-         * span: 0 <= y <= 1
-         * y = x*s, d = 1*s
+    FANN_LINEAR_PIECE - Bounded linear activation function.
+      * span: 0 <= y <= 1
+      * y = x*s, d = 1*s
 
-        FANN_LINEAR_PIECE_SYMMETRIC - Bounded linear activation function.
-         * span: -1 <= y <= 1
-         * y = x*s, d = 1*s
+    FANN_LINEAR_PIECE_SYMMETRIC - Bounded linear activation function.
+      * span: -1 <= y <= 1
+      * y = x*s, d = 1*s
 
-        FANN_SIN_SYMMETRIC - Periodical sinus activation function.
-         * span: -1 <= y <= 1
-         * y = sin(x*s)
-         * d = s*cos(x*s)
+    FANN_SIN_SYMMETRIC - Periodical sinus activation function.
+      * span: -1 <= y <= 1
+      * y = sin(x*s)
+      * d = s*cos(x*s)
 
-        FANN_COS_SYMMETRIC - Periodical cosinus activation function.
-         * span: -1 <= y <= 1
-         * y = cos(x*s)
-         * d = s*-sin(x*s)
+    FANN_COS_SYMMETRIC - Periodical cosinus activation function.
+      * span: -1 <= y <= 1
+      * y = cos(x*s)
+      * d = s*-sin(x*s)
 
-        FANN_SIN - Periodical sinus activation function.
-         * span: 0 <= y <= 1
-         * y = sin(x*s)/2+0.5
-         * d = s*cos(x*s)/2
+    FANN_SIN - Periodical sinus activation function.
+      * span: 0 <= y <= 1
+      * y = sin(x*s)/2+0.5
+      * d = s*cos(x*s)/2
 
-        FANN_COS - Periodical cosinus activation function.
-         * span: 0 <= y <= 1
-         * y = cos(x*s)/2+0.5
-         * d = s*-sin(x*s)/2
+    FANN_COS - Periodical cosinus activation function.
+      * span: 0 <= y <= 1
+      * y = cos(x*s)/2+0.5
+      * d = s*-sin(x*s)/2
 
-        FANN_LINEAR_PIECE_RECT - ReLU
-         * span: -inf < y < inf
-         * y = x<0? 0: x
-         * d = x<0? 0: 1
+    FANN_LINEAR_PIECE_RECT - ReLU
+      * span: -inf < y < inf
+      * y = x<0? 0: x
+      * d = x<0? 0: 1
 
-        FANN_LINEAR_PIECE_RECT_LEAKY - leaky ReLU
-         * span: -inf < y < inf
-         * y = x<0? 0.01*x: x
-         * d = x<0? 0.01: 1
+    FANN_LINEAR_PIECE_RECT_LEAKY - leaky ReLU
+      * span: -inf < y < inf
+      * y = x<0? 0.01*x: x
+      * d = x<0? 0.01: 1
 
-        See also:
-        <fann_set_activation_function_layer>, <fann_set_activation_function_hidden>,
-        <fann_set_activation_function_output>, <fann_set_activation_steepness>,
-    <fann_set_activation_function>
+    See also:
+      <fann_set_activation_function_layer>, <fann_set_activation_function_hidden>,
+      <fann_set_activation_function_output>, <fann_set_activation_steepness>,
+      <fann_set_activation_function>
 */
 enum fann_activationfunc_enum {
   FANN_LINEAR = 0,
@@ -254,13 +252,13 @@ enum fann_activationfunc_enum {
 
 /* Constant: FANN_ACTIVATIONFUNC_NAMES
 
-   Constant array consisting of the names for the activation function, so that the name of an
-   activation function can be received by:
-   (code)
-   char *name = FANN_ACTIVATIONFUNC_NAMES[activation_function];
-   (end)
+    Constant array consisting of the names for the activation function, so that the name of an
+    activation function can be received by:
+    (code)
+    char *name = FANN_ACTIVATIONFUNC_NAMES[activation_function];
+    (end)
 
-   See Also:
+    See Also:
       <fann_activationfunc_enum>
 */
 static char const *const FANN_ACTIVATIONFUNC_NAMES[] = {"FANN_LINEAR",
@@ -285,56 +283,58 @@ static char const *const FANN_ACTIVATIONFUNC_NAMES[] = {"FANN_LINEAR",
                                                         "FANN_LINEAR_PIECE_RECT_LEAKY"};
 
 /* Enum: fann_errorfunc_enum
-        Error function used during training.
 
-        FANN_ERRORFUNC_LINEAR - Standard linear error function.
-        FANN_ERRORFUNC_TANH - Tanh error function, usually better
-                but can require a lower learning rate. This error function aggressively targets
-   outputs that differ much from the desired, while not targeting outputs that only differ a little
-   that much. This activation function is not recommended for cascade training and incremental
-   training.
+    Error function used during training.
 
-        See also:
-                <fann_set_train_error_function>, <fann_get_train_error_function>
+      FANN_ERRORFUNC_LINEAR - Standard linear error function.
+      FANN_ERRORFUNC_TANH - Tanh error function, usually better
+        but can require a lower learning rate. This error function aggressively targets
+        outputs that differ much from the desired, while not targeting outputs that only
+        differ a little that much. This activation function is not recommended for cascade
+        training and incremental training.
+
+    See also:
+      <fann_set_train_error_function>, <fann_get_train_error_function>
 */
 enum fann_errorfunc_enum { FANN_ERRORFUNC_LINEAR = 0, FANN_ERRORFUNC_TANH };
 
 /* Constant: FANN_ERRORFUNC_NAMES
 
-   Constant array consisting of the names for the training error functions, so that the name of an
-   error function can be received by:
-   (code)
-   char *name = FANN_ERRORFUNC_NAMES[error_function];
-   (end)
+    Constant array consisting of the names for the training error functions, so that the name of an
+    error function can be received by:
+    (code)
+    char *name = FANN_ERRORFUNC_NAMES[error_function];
+    (end)
 
-   See Also:
+    See Also:
       <fann_errorfunc_enum>
 */
 static char const *const FANN_ERRORFUNC_NAMES[] = {"FANN_ERRORFUNC_LINEAR", "FANN_ERRORFUNC_TANH"};
 
 /* Enum: fann_stopfunc_enum
-        Stop criteria used during training.
 
-        FANN_STOPFUNC_MSE - Stop criterion is Mean Square Error (MSE) value.
-        FANN_STOPFUNC_BIT - Stop criterion is number of bits that fail. The number of bits; means
-   the number of output neurons which differ more than the bit fail limit (see
-   <fann_get_bit_fail_limit>, <fann_set_bit_fail_limit>). The bits are counted in all of the
-   training data, so this number can be higher than the number of training data.
+    Stop criteria used during training.
 
-        See also:
-                <fann_set_train_stop_function>, <fann_get_train_stop_function>
+      FANN_STOPFUNC_MSE - Stop criterion is Mean Square Error (MSE) value.
+      FANN_STOPFUNC_BIT - Stop criterion is number of bits that fail. The number of bits; means
+        the number of output neurons which differ more than the bit fail limit (see
+        <fann_get_bit_fail_limit>, <fann_set_bit_fail_limit>). The bits are counted in all of the
+        training data, so this number can be higher than the number of training data.
+
+    See also:
+      <fann_set_train_stop_function>, <fann_get_train_stop_function>
 */
 enum fann_stopfunc_enum { FANN_STOPFUNC_MSE = 0, FANN_STOPFUNC_BIT };
 
 /* Constant: FANN_STOPFUNC_NAMES
 
-   Constant array consisting of the names for the training stop functions, so that the name of a
-   stop function can be received by:
-   (code)
-   char *name = FANN_STOPFUNC_NAMES[stop_function];
-   (end)
+    Constant array consisting of the names for the training stop functions, so that the name of a
+    stop function can be received by:
+    (code)
+    char *name = FANN_STOPFUNC_NAMES[stop_function];
+    (end)
 
-   See Also:
+    See Also:
       <fann_stopfunc_enum>
 */
 static char const *const FANN_STOPFUNC_NAMES[] = {"FANN_STOPFUNC_MSE", "FANN_STOPFUNC_BIT"};
@@ -343,13 +343,14 @@ static char const *const FANN_STOPFUNC_NAMES[] = {"FANN_STOPFUNC_MSE", "FANN_STO
 
     Definition of network types used by <fann_get_network_type>
 
-    FANN_NETTYPE_LAYER - Each layer only has connections to the next layer
-    FANN_NETTYPE_SHORTCUT - Each layer has connections to all following layers
+      FANN_NETTYPE_LAYER - Each layer only has connections to the next layer
+      FANN_NETTYPE_SHORTCUT - Each layer has connections to all following layers
 
-   See Also:
+    See Also:
       <fann_get_network_type>
 
-   This enumeration appears in FANN >= 2.1.0
+    Version:
+      This enumeration appears in FANN >= 2.1.0
 */
 enum fann_nettype_enum {
   FANN_NETTYPE_LAYER = 0, /* Each layer only has connections to the next layer */
@@ -358,54 +359,54 @@ enum fann_nettype_enum {
 
 /* Constant: FANN_NETWORK_TYPE_NAMES
 
-   Constant array consisting of the names for the network types, so that the name of an
-   network type can be received by:
-   (code)
-   char *network_type_name = FANN_NETWORK_TYPE_NAMES[fann_get_network_type(ann)];
-   (end)
+    Constant array consisting of the names for the network types, so that the name of an
+    network type can be received by:
+    (code)
+    char *network_type_name = FANN_NETWORK_TYPE_NAMES[fann_get_network_type(ann)];
+    (end)
 
-   See Also:
+    See Also:
       <fann_get_network_type>
 
-   This constant appears in FANN >= 2.1.0
+    Version:
+      This constant appears in FANN >= 2.1.0
 */
 static char const *const FANN_NETTYPE_NAMES[] = {"FANN_NETTYPE_LAYER", "FANN_NETTYPE_SHORTCUT"};
 
 /* forward declarations for use with the callback */
 struct fann;
 struct fann_train_data;
+
 /* Type: fann_callback_type
-   This callback function can be called during training when using <fann_train_on_data>,
-   <fann_train_on_file> or <fann_cascadetrain_on_data>.
+    This callback function can be called during training when using <fann_train_on_data>,
+    <fann_train_on_file> or <fann_cascadetrain_on_data>.
 
-        >typedef int (FANN_API * fann_callback_type) (struct fann *ann, struct fann_train_data
-   *train,
-        > unsigned int max_epochs, >                                             unsigned int
-   epochs_between_reports, >                                             float desired_error,
-   unsigned int epochs);
+    > typedef int (FANN_API * fann_callback_type) (struct fann *ann, struct fann_train_data *train,
+    >                                              unsigned int max_epochs,
+    >                                              unsigned int epochs_between_reports,
+    >                                              float desired_error, unsigned int epochs);
 
-        The callback can be set by using <fann_set_callback> and is very useful for doing custom
-        things during training. It is recommended to use this function when implementing custom
-        training procedures, or when visualizing the training in a GUI etc. The parameters which the
-        callback function takes are the parameters given to <fann_train_on_data>, plus an epochs
-        parameter which tells how many epochs the training has taken so far.
+    The callback can be set by using <fann_set_callback> and is very useful for doing custom things
+    during training. It is recommended to use this function when implementing custom training
+    procedures, or when visualizing the training in a GUI etc. The parameters which the callback
+    function takes are the parameters given to <fann_train_on_data>, plus an epochs parameter which
+    tells how many epochs the training has taken so far.
 
-        The callback function should return an integer, if the callback function returns -1, the
-   training will terminate.
+    The callback function should return an integer, if the callback function returns -1, the
+    training will terminate.
 
-        Example of a callback function:
-                >int FANN_API test_callback(struct fann *ann, struct fann_train_data *train,
-                >				            unsigned int max_epochs, unsigned int
-   epochs_between_reports,
-                >				            float desired_error, unsigned int
-   epochs)
-                >{
-                >	printf("Epochs     %8d. MSE: %.5f. Desired-MSE: %.5f\n", epochs,
-   fann_get_MSE(ann), desired_error); >	return 0;
-                >}
+    Example of a callback function:
+    > int FANN_API test_callback(struct fann *ann, struct fann_train_data *train,
+    >	                           unsigned int max_epochs, unsigned int epochs_between_reports,
+    >                            float desired_error, unsigned int epochs)
+    > {
+    >	  printf("Epochs %8d. MSE: %.5f. Desired-MSE: %.5f\n", epochs, fann_get_MSE(ann),
+    >     desired_error);
+    >   return 0;
+    > }
 
-        See also:
-                <fann_set_callback>, <fann_train_on_data>
+    See also:
+      <fann_set_callback>, <fann_train_on_data>
  */
 FANN_EXTERNAL typedef int(FANN_API *fann_callback_type)(struct fann *ann,
                                                         struct fann_train_data *train,
@@ -454,11 +455,11 @@ struct fann_layer {
 
 /* Struct: struct fann_error
 
-        Structure used to store error-related information, both
-        <struct fann> and <struct fann_train_data> can be casted to this type.
+    Structure used to store error-related information, both <struct fann> and
+    <struct fann_train_data> can be casted to this type.
 
-        See also:
-                <fann_set_error_log>, <fann_get_errno>
+    See also:
+      <fann_set_error_log>, <fann_get_errno>
 */
 struct fann_error {
   enum fann_errno_enum errno_f;
@@ -466,18 +467,19 @@ struct fann_error {
   char *errstr;
 };
 
-/* 	Struct: struct fann
-        The fast artificial neural network (fann) structure.
+/* Struct: struct fann
 
-        Data within this structure should never be accessed directly, but only by using the
-        *fann_get_...* and *fann_set_...* functions.
+    The fast artificial neural network (fann) structure.
 
-        The fann structure is created using one of the *fann_create_...* functions and each of
-        the functions which operates on the structure takes *struct fann * ann* as the first
-   parameter.
+    Data within this structure should never be accessed directly, but only by using the
+    *fann_get_...* and *fann_set_...* functions.
 
-        See also:
-                <fann_create_standard>, <fann_destroy>
+    The fann structure is created using one of the *fann_create_...* functions and each of
+    the functions which operates on the structure takes *struct fann * ann* as the first
+    parameter.
+
+    See also:
+      <fann_create_standard>, <fann_destroy>
  */
 struct fann {
   /* The type of error that last occured. */
@@ -489,43 +491,43 @@ struct fann {
   /* A string representation of the last error. */
   char *errstr;
 
-  /* the learning rate of the network */
+  /* The learning rate of the network. */
   float learning_rate;
 
   /* The learning momentum used for backpropagation algorithm. */
   float learning_momentum;
 
-  /* the connection rate of the network
-   * between 0 and 1, 1 meaning fully connected
+  /* The connection rate of the network.
+   * It is between 0 and 1, 1 meaning fully connected
    */
   float connection_rate;
 
-  /* is 1 if shortcut connections are used in the ann otherwise 0
+  /* It is 1 if shortcut connections are used in the ann otherwise 0
    * Shortcut connections are connections that skip layers.
    * A fully connected ann with shortcut connections are a ann where
    * neurons have connections to all neurons in all later layers.
    */
   enum fann_nettype_enum network_type;
 
-  /* pointer to the first layer (input layer) in an array af all the layers,
-   * including the input and outputlayers
+  /* Pointer to the first layer (input layer) in an array af all the layers,
+   * including the input and outputlayers.
    */
   struct fann_layer *first_layer;
 
-  /* pointer to the layer past the last layer in an array af all the layers,
-   * including the input and outputlayers
+  /* Pointer to the layer past the last layer in an array af all the layers,
+   * including the input and outputlayers.
    */
   struct fann_layer *last_layer;
 
   /* Total number of neurons.
-   * very useful, because the actual neurons are allocated in one long array
+   * Very useful, because the actual neurons are allocated in one long array.
    */
   unsigned int total_neurons;
 
-  /* Number of input neurons (not calculating bias) */
+  /* Number of input neurons (not calculating bias). */
   unsigned int num_input;
 
-  /* Number of output neurons (not calculating bias) */
+  /* Number of output neurons (not calculating bias). */
   unsigned int num_output;
 
   /* The weight array */
@@ -545,12 +547,12 @@ struct fann {
   enum fann_train_enum training_algorithm;
 
 #ifdef FIXEDFANN
-  /* the decimal_point, used for shifting the fix point
+  /* The decimal_point, used for shifting the fix point
    * in fixed point integer operatons.
    */
   unsigned int decimal_point;
 
-  /* the multiplier, used for multiplying the fix point
+  /* The multiplier, used for multiplying the fix point
    * in fixed point integer operatons.
    * Only used in special cases, since the decimal_point is much faster.
    */
@@ -567,21 +569,19 @@ struct fann {
   fann_type sigmoid_symmetric_values[6];
 #endif
 
-  /* Total number of connections.
-   * very useful, because the actual connections
-   * are allocated in one long array
+  /* Total number of connections. Very useful, because the actual connections
+   * are allocated in one long array.
    */
   unsigned int total_connections;
 
-  /* used to store outputs in */
+  /* The output arary used to store outputs in. */
   fann_type *output;
 
-  /* the number of data used to calculate the mean square error.
+  /* The number of data used to calculate the mean square error.
    */
   unsigned int num_MSE;
 
-  /* the total error value.
-   * the real mean square error is MSE_value/num_MSE
+  /* The total error value. The real mean square error is MSE_value/num_MSE.
    */
   float MSE_value;
 
@@ -614,25 +614,21 @@ struct fann {
 
   /* Variables for use with Cascade Correlation */
 
-  /* The error must change by at least this
-   * fraction of its old value to count as a
-   * significant change.
+  /* The error must change by at least this fraction of its old value to count as a significant
+   * change.
    */
   float cascade_output_change_fraction;
 
-  /* No change in this number of epochs will cause
-   * stagnation.
+  /* No change in this number of epochs will cause stagnation.
    */
   unsigned int cascade_output_stagnation_epochs;
 
-  /* The error must change by at least this
-   * fraction of its old value to count as a
-   * significant change.
+  /* The error must change by at least this fraction of its old value to count as a significant
+   * change.
    */
   float cascade_candidate_change_fraction;
 
-  /* No change in this number of epochs will cause
-   * stagnation.
+  /* No change in this number of epochs will cause stagnation.
    */
   unsigned int cascade_candidate_stagnation_epochs;
 
@@ -640,19 +636,19 @@ struct fann {
    */
   unsigned int cascade_best_candidate;
 
-  /* The upper limit for a candidate score
+  /* The upper limit for a candidate score.
    */
   fann_type cascade_candidate_limit;
 
-  /* Scale of copied candidate output weights
+  /* Scale of copied candidate output weights.
    */
   fann_type cascade_weight_multiplier;
 
-  /* Maximum epochs to train the output neurons during cascade training
+  /* Maximum epochs to train the output neurons during cascade training.
    */
   unsigned int cascade_max_out_epochs;
 
-  /* Maximum epochs to train the candidate neurons during cascade training
+  /* Maximum epochs to train the candidate neurons during cascade training.
    */
   unsigned int cascade_max_cand_epochs;
 
@@ -660,12 +656,11 @@ struct fann {
    */
   unsigned int cascade_min_out_epochs;
 
-  /* Minimum epochs to train the candidate neurons during cascade training
+  /* Minimum epochs to train the candidate neurons during cascade training.
    */
   unsigned int cascade_min_cand_epochs;
 
-  /* An array consisting of the activation functions used when doing
-   * cascade training.
+  /* An array consisting of the activation functions used when doing cascade training.
    */
   enum fann_activationfunc_enum *cascade_activation_functions;
 
@@ -682,27 +677,23 @@ struct fann {
   unsigned int cascade_activation_steepnesses_count;
 
   /* The number of candidates of each type that will be present.
-   * The actual number of candidates is then
-   * cascade_activation_functions_count *
-   * cascade_activation_steepnesses_count *
-   * cascade_num_candidate_groups
+   * The actual number of candidates is then cascade_activation_functions_count *
+   * cascade_activation_steepnesses_count * cascade_num_candidate_groups
    */
   unsigned int cascade_num_candidate_groups;
 
-  /* An array consisting of the score of the individual candidates,
-   * which is used to decide which candidate is the best
+  /* An array consisting of the score of the individual candidates, which is used to decide which
+   * candidate is the best.
    */
   fann_type *cascade_candidate_scores;
 
-  /* The number of allocated neurons during cascade correlation algorithms.
-   * This number might be higher than the actual number of neurons to avoid
-   * allocating new space too often.
+  /* The number of allocated neurons during cascade correlation algorithms. This number might be
+   * higher than the actual number of neurons to avoid allocating new space too often.
    */
   unsigned int total_neurons_allocated;
 
-  /* The number of allocated connections during cascade correlation algorithms.
-   * This number might be higher than the actual number of neurons to avoid
-   * allocating new space too often.
+  /* The number of allocated connections during cascade correlation algorithms. This number might
+   * be higher than the actual number of neurons to avoid allocating new space too often.
    */
   unsigned int total_connections_allocated;
 
@@ -746,9 +737,9 @@ struct fann {
   /* Current training epoch */
   unsigned int sarprop_epoch;
 
-  /* Used to contain the slope errors used during batch training
-   * Is allocated during first training session,
-   * which means that if we do not train, it is never allocated.
+  /* Used to contain the slope errors used during batch training.
+   * It is allocated during first training session, which means that if we do not train, it is
+   * never allocated.
    */
   fann_type *train_slopes;
 
@@ -769,22 +760,23 @@ struct fann {
   fann_type *prev_weights_deltas;
 
   /* Adam optimizer parameters */
-  /* First moment vector (mean of gradients) for Adam optimizer */
+
+  /* First moment vector (mean of gradients) for Adam optimizer. */
   fann_type *adam_m;
 
-  /* Second moment vector (variance of gradients) for Adam optimizer */
+  /* Second moment vector (variance of gradients) for Adam optimizer. */
   fann_type *adam_v;
 
-  /* Exponential decay rate for the first moment estimates (default 0.9) */
+  /* Exponential decay rate for the first moment estimates (default 0.9). */
   float adam_beta1;
 
-  /* Exponential decay rate for the second moment estimates (default 0.999) */
+  /* Exponential decay rate for the second moment estimates (default 0.999). */
   float adam_beta2;
 
-  /* Small constant for numerical stability (default 1e-8) */
+  /* Small constant for numerical stability (default 1e-8). */
   float adam_epsilon;
 
-  /* Current timestep for Adam optimizer */
+  /* Current timestep for Adam optimizer. */
   unsigned int adam_timestep;
 
 #ifndef FIXEDFANN
@@ -831,9 +823,10 @@ struct fann {
     weight - The numerical value of the weight
 
     See Also:
-        <fann_get_connection_array>, <fann_set_weight_array>
+      <fann_get_connection_array>, <fann_set_weight_array>
 
-   This structure appears in FANN >= 2.1.0
+    Version:
+      This structure appears in FANN >= 2.1.0
 */
 struct fann_connection {
   /* Unique number used to identify source neuron */

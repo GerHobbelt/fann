@@ -656,7 +656,7 @@ void fann_update_weights_quickprop(struct fann *ann, unsigned int num_data,
 }
 
 /* INTERNAL FUNCTION
-   The iRprop- algorithm
+    The iRprop- algorithm
 */
 void fann_update_weights_irpropm(struct fann *ann, unsigned int first_weight,
                                  unsigned int past_end) {
@@ -711,17 +711,17 @@ void fann_update_weights_irpropm(struct fann *ann, unsigned int first_weight,
 }
 
 /* INTERNAL FUNCTION
-   The Adam (Adaptive Moment Estimation) algorithm
+    The Adam (Adaptive Moment Estimation) algorithm
 
-   Adam combines ideas from momentum and RMSProp:
-   - Maintains exponential moving averages of gradients (first moment, m)
-   - Maintains exponential moving averages of squared gradients (second moment, v)
-   - Uses bias correction to account for initialization at zero
+    Adam combines ideas from momentum and RMSProp:
+      - Maintains exponential moving averages of gradients (first moment, m)
+      - Maintains exponential moving averages of squared gradients (second moment, v)
+      - Uses bias correction to account for initialization at zero
 
-   Parameters:
-   - beta1: exponential decay rate for first moment (default 0.9)
-   - beta2: exponential decay rate for second moment (default 0.999)
-   - epsilon: small constant for numerical stability (default 1e-8)
+    Parameters:
+      - beta1: exponential decay rate for first moment (default 0.9)
+      - beta2: exponential decay rate for second moment (default 0.999)
+      - epsilon: small constant for numerical stability (default 1e-8)
  */
 void fann_update_weights_adam(struct fann *ann, unsigned int num_data, unsigned int first_weight,
                               unsigned int past_end) {
